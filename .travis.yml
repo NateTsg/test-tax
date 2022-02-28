@@ -2,6 +2,18 @@ sudo: required
 services :  
   - docker
 before_install : 
-  - docker build -t test-tax .
+  - docker build -f Dockerfile.dev -t test-tax .
 script:
   - docker run test-tax npm run test -- --coverage
+deploy:
+  provider :  elasticbeanstalk
+  region : "us-east-1"
+  app : "dev0tax"
+  env : "Dev0tax-env"
+  bucket_name : "elasticbeanstalk-us-east-1-385823182018"
+  bucket_path : "dev0tax"
+  on :
+    branch : main
+  access_key_id : $AWS_ACCESS_KEY
+  secret_Access_key:
+    secure : "$AWS_SECRET_KEY"
